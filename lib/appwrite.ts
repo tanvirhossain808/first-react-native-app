@@ -267,30 +267,12 @@ export const createVideo = async (form) => {
 
 export const addBookMark = async (id: string, posts: any[], creatorId: string) => {
     const update = await databases.updateDocument(appWriteConfig.databaseId, appWriteConfig.userCollectionId, creatorId, { saved: posts[0].creator.saved.length ? [...posts[0].creator.saved, id] : [id] })
+    // const update = await databases.updateDocument(appWriteConfig.databaseId, appWriteConfig.userCollectionId, creatorId, { saved: [] })
     return update
 
 
 }
 
-/* const getBookmarkPost = async (id: string) => {
-    console.log(id);
-    try {
-        const currentAccount = await account.get()
-        const posts = await databases.listDocuments(
-            appWriteConfig.databaseId,
-            appWriteConfig.videoCollectionId,
-            [Query.equal("Document ID", id)]
-        )
-        return posts.documents
-    }
-
-
-    catch (error) {
-        console.log(error);
-    }
-
-}
- */
 const getBookmarkPost = async (id) => {
     console.log(id);
     try {
@@ -299,7 +281,7 @@ const getBookmarkPost = async (id) => {
             appWriteConfig.databaseId,
             appWriteConfig.videoCollectionId,
             [Query.contains("$id", id)]
-        );
+        )
         return posts.documents;
     } catch (error) {
         console.log(error);
@@ -311,9 +293,30 @@ const getBookmarkPost = async (id) => {
 export const bookmarkedPosts = async (posts) => {
     try {
         const processPost = await getBookmarkPost(posts)
+
         return processPost
     } catch (error) {
         console.log(error)
+    }
+
+
+}
+
+
+
+export const searchParticularBookmarkedPost = async (ids, query) => {
+
+    try {
+        const currentAccount = await account.get();
+        const posts = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId,
+            [Query.contains("title", query)],
+            [Query.contains("$id", ids)]
+        );
+        return posts.documents
+    } catch (error) {
+        console.log(error);
     }
 
 

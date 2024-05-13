@@ -9,6 +9,7 @@ import { getAllPosts, getLatestPosts } from '@/lib/appwrite';
 import useAppWrite from '@/lib/hooks/useAppWrite';
 import VideoCard from '@/components/VideoCard/VideoCard';
 import { useGlobalContext } from '@/context/GlobalProvider';
+import { useRoute } from '@react-navigation/native';
 
 
 
@@ -18,6 +19,7 @@ const Home = (): JSX.Element => {
 
 
     const [posts, setPosts] = useState({ false: false })
+    const { name } = useRoute()
     const [latestPost, setLatestPost] = useState([])
     const { refetch, isLoading } = useAppWrite(getAllPosts, setPosts)
     const { isLoading: refetchLoading } = useAppWrite(getLatestPosts, setLatestPost)
@@ -28,6 +30,7 @@ const Home = (): JSX.Element => {
 
         setRefreshing(false)
     }
+
     console.log(user, "post");
 
     return (
@@ -53,7 +56,7 @@ const Home = (): JSX.Element => {
                                 />
                             </View>
                         </View>
-                        <SearchInput />
+                        <SearchInput name={name} />
                         <View className='w-full flex-1 pt-5 pb-8'>
 
                             <Text className='text-gray-100 text-lg font-pregular mb-3'>
