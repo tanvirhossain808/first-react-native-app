@@ -132,7 +132,6 @@ export const getLatestPosts = async () => {
 export const searchPosts = async (query) => {
     try {
         const currentAccount = await account.get()
-        console.log(currentAccount, "currentAccount");
         const posts = await databases.listDocuments(
             appWriteConfig.databaseId,
             appWriteConfig.videoCollectionId,
@@ -266,10 +265,56 @@ export const createVideo = async (form) => {
 }
 
 
-export const addBookMark = async (id) => {
-
-    const update = await databases.updateDocument(appWriteConfig.databaseId, appWriteConfig.videoCollectionId, id, { isMarked: false })
+export const addBookMark = async (id: string, posts: any[], creatorId: string) => {
+    const update = await databases.updateDocument(appWriteConfig.databaseId, appWriteConfig.userCollectionId, creatorId, { saved: posts[0].creator.saved.length ? [...posts[0].creator.saved, id] : [id] })
     return update
+
+
+}
+
+/* const getBookmarkPost = async (id: string) => {
+    console.log(id);
+    try {
+        const currentAccount = await account.get()
+        const posts = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId,
+            [Query.equal("Document ID", id)]
+        )
+        return posts.documents
+    }
+
+
+    catch (error) {
+        console.log(error);
+    }
+
+}
+ */
+const getBookmarkPost = async (id) => {
+    console.log(id);
+    try {
+        const currentAccount = await account.get();
+        const posts = await databases.listDocuments(
+            appWriteConfig.databaseId,
+            appWriteConfig.videoCollectionId,
+            [Query.contains("$id", id)]
+        );
+        return posts.documents;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+
+export const bookmarkedPosts = async (posts) => {
+    try {
+        const processPost = await getBookmarkPost(posts)
+        return processPost
+    } catch (error) {
+        console.log(error)
+    }
 
 
 }

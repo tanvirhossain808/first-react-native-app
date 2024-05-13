@@ -28,7 +28,7 @@ const Home = (): JSX.Element => {
 
         setRefreshing(false)
     }
-    // console.log(posts);
+    console.log(user, "post");
 
     return (
         <SafeAreaView className='bg-primary flex-1'>
@@ -36,7 +36,7 @@ const Home = (): JSX.Element => {
                 keyExtractor={(item: {
                     $id: string; id: string
                 }) => item.$id}
-                renderItem={({ item }) => (<VideoCard setPosts={setPosts} video={item} />
+                renderItem={({ item }) => (<VideoCard setPosts={setPosts} posts={posts} video={item} />
                 )}
                 ListHeaderComponent={() => (
                     <View className='mt-6 px-4 space-y-6'>

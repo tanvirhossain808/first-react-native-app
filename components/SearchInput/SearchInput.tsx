@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { icons } from "../../constants"
 import { router, usePathname } from 'expo-router'
 
-const SearchInput = ({ initailQuery }): JSX.Element => {
+const SearchInput = ({ initailQuery }: { initailQuery?: string }): JSX.Element => {
     const [showPassword, setShowPassword] = useState(false)
     const pathName = usePathname()
     const [query, setQuery] = useState(initailQuery || "")

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 
-const useAppWrite = (fn, setTesting) => {
+const useAppWrite = (fn, setPosts) => {
     const [isLoading, setIsLoading] = useState(true)
     const fetchData = async () => {
         setIsLoading(true)
         try {
             const response = await fn()
-            setTesting(response)
-            // console.log(response);
+            setPosts(response)
+
 
         } catch (error) {
             Alert.alert("Error", error);

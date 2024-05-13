@@ -9,13 +9,17 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { icons } from '@/constants';
 import InfoBox from '@/components/InfoBox/InfoBox';
+import { useState } from 'react';
 
 
 
 
 const Profile = (): JSX.Element => {
+    const [posts, setUserPost] = useState([])
+    // console.log(data);
     const { user, setUser, isLoggedIn, setIsLoading } = useGlobalContext()
-    const { data: posts, refetch } = useAppWrite(() => getUserPosts(user?.$id))
+    console.log(user.$id);
+    const { refetch } = useAppWrite(() => getUserPosts(user?.$id), setUserPost)
 
 
     const logout = async () => {

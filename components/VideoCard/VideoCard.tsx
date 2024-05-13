@@ -4,26 +4,39 @@ import { addBookMark, getAllPosts } from '@/lib/appwrite'
 import useAppWrite from '@/lib/hooks/useAppWrite'
 import { ResizeMode, Video } from 'expo-av'
 import { useState } from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 
-const VideoCard = ({ video: { title, thumbnail, video, $id: id, isMarked, creator: { username, avatar } }, setPosts }: { video: any }) => {
-    // console.log(setTesting);
-    const { refetch, data } = useAppWrite(getAllPosts, setPosts)
-    // console.log(id); 
-    // console.log(rest, "rest");
-    const { user } = useGlobalContext()
+const VideoCard = ({ video: { title, thumbnail, video, isMarked, creator: { username, avatar, saved, $id: creatorId }, $id: id }, setPosts, posts, }: { video: any, posts?: any, setPosts?: any }) => {
+
+    const { user, setUser } = useGlobalContext()
     const [play, setPlay] = useState(false)
     const [touchMenu, setTouchMenu] = useState(false)
     // console.log(user);
     const handleBookMark = async () => {
-        // console.log(user.id);
-        const updateResult = addBookMark(id)
-        refetch()
+        const isExit = user.saved.find(post => post === id)
+        if (isExit) return Alert.alert("Inof", "Already added to the bookmark")
 
+        try {
+            const updateResult = await addBookMark(id, posts, creatorId)
+            setUser(updateResult)
+            console.log(updateResult, "dk");
+            // console.log(updateResult, "upre");
+            setPosts((pre) => pre.map((post) => {
+                // post = { ...post.creator.saved = [...post.creator.saved, id] }
+                // console.log(post);
+                return {
+                    ...post, creator: { ...post.creator, saved: post.creator.saved.length ? [...post.creator.saved, id] : [id] }
+
+                }
+
+
+            }))
+        } catch (error) {
+            console.log(error);
+        }
 
 
     }
-    console.log(data);
     return (
         <View className='flex-col items-center px-4 mb-14'>
             <View className='flex-row gap-3 items-start'>

@@ -1,5 +1,5 @@
 import { View, Text, FlatList } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SearchInput from '@/components/SearchInput/SearchInput';
 import EmptyState from '@/components/EmptyState/EmptyState';
@@ -9,16 +9,20 @@ import VideoCard from '@/components/VideoCard/VideoCard';
 import { useLocalSearchParams } from 'expo-router';
 
 
-
+let i = 0
 
 const Search = (): JSX.Element => {
+    const [posts, setPosts] = useState([])
     const { query } = useLocalSearchParams()
 
-    const { data: posts, refetch } = useAppWrite(() => searchPosts(query))
+    const { refetch } = useAppWrite(() => searchPosts(query), setPosts)
 
     useEffect(() => {
         refetch()
     }, [query])
+    console.log(query, "query");
+    i++;
+    console.log(i);
 
     return (
         <SafeAreaView className='bg-primary flex-1'>
