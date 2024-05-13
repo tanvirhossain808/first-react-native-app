@@ -17,9 +17,10 @@ const Home = (): JSX.Element => {
     const { user, setUser, isLoggedIn } = useGlobalContext()
 
 
-
-    const { data: posts, refetch } = useAppWrite(getAllPosts)
-    const { data: latestPost } = useAppWrite(getLatestPosts)
+    const [posts, setPosts] = useState({ false: false })
+    const [latestPost, setLatestPost] = useState([])
+    const { refetch, isLoading } = useAppWrite(getAllPosts, setPosts)
+    const { isLoading: refetchLoading } = useAppWrite(getLatestPosts, setLatestPost)
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const onRefresh = async () => {
         setRefreshing(true)
@@ -28,13 +29,14 @@ const Home = (): JSX.Element => {
         setRefreshing(false)
     }
     // console.log(posts);
+
     return (
         <SafeAreaView className='bg-primary flex-1'>
             <FlatList data={posts}
                 keyExtractor={(item: {
                     $id: string; id: string
                 }) => item.$id}
-                renderItem={({ item }) => (<VideoCard video={item} />
+                renderItem={({ item }) => (<VideoCard setPosts={setPosts} video={item} />
                 )}
                 ListHeaderComponent={() => (
                     <View className='mt-6 px-4 space-y-6'>

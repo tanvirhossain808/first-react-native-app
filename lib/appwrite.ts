@@ -264,3 +264,12 @@ export const createVideo = async (form) => {
 
     }
 }
+
+
+export const addBookMark = async (id) => {
+
+    const update = await databases.updateDocument(appWriteConfig.databaseId, appWriteConfig.videoCollectionId, id, { isMarked: false })
+    return update
+
+
+}

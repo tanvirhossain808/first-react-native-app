@@ -5,11 +5,13 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 
 type userContext = {
     isLoggedIn: boolean,
+    isMarked: boolean,
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
     user: any,
     setUser: React.Dispatch<React.SetStateAction<boolean>>,
     isLoading: boolean,
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+    setIsMarked: React.Dispatch<React.SetStateAction<boolean>>
 
 }
 
@@ -19,6 +21,7 @@ export const useGlobalContext = () => useContext(GlobalContext)
 
 export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }): JSX.Element => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+    const [isMarked, setIsMarked] = useState(false)
     const [user, setUser] = useState<null | any>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     useEffect(() => {
@@ -36,6 +39,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             .catch(error => console.log(error))
             .finally(() => setIsLoading(false))
     }, [])
+    console.log(user);
     return (
         <GlobalContext.Provider value={
             {
@@ -44,7 +48,9 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 user,
                 setUser,
                 isLoading,
-                setIsLoggedIn
+                setIsLoggedIn,
+                isMarked,
+                setIsMarked
             }
         }>
             {children}

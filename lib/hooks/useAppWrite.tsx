@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 
-const useAppWrite = (fn) => {
-    const [data, setData] = useState([])
+const useAppWrite = (fn, setTesting) => {
     const [isLoading, setIsLoading] = useState(true)
     const fetchData = async () => {
         setIsLoading(true)
         try {
             const response = await fn()
-            setData(response)
+            setTesting(response)
+            // console.log(response);
 
         } catch (error) {
             Alert.alert("Error", error);
@@ -23,11 +23,9 @@ const useAppWrite = (fn) => {
 
         fetchData()
 
-
-
     }, [])
     const refetch = () => fetchData()
-    return { data, isLoading, refetch }
+    return { isLoading, refetch }
 };
 
 export default useAppWrite;

@@ -56,7 +56,7 @@ const TabsLayout = (): JSX.Element => {
                     tabBarIcon: ({
                         color, focused
                     }) => (
-                        <TabIcon icon={icons.home} color={color} name="Bookmark"
+                        <TabIcon icon={icons.bookmark} color={color} name="Bookmark"
                             focused={focused}
                         />
                     )
@@ -70,7 +70,7 @@ const TabsLayout = (): JSX.Element => {
                     tabBarIcon: ({
                         color, focused
                     }) => (
-                        <TabIcon icon={icons.home} color={color} name="Create"
+                        <TabIcon icon={icons.plus} color={color} name="Create"
                             focused={focused}
                         />
                     )
@@ -84,7 +84,7 @@ const TabsLayout = (): JSX.Element => {
                     tabBarIcon: ({
                         color, focused
                     }) => (
-                        <TabIcon icon={icons.home} color={color} name="Profile"
+                        <TabIcon icon={icons.profile} color={color} name="Profile"
                             focused={focused}
                         />
                     )

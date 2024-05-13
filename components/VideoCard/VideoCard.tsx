@@ -1,10 +1,29 @@
 import { icons } from '@/constants'
+import { useGlobalContext } from '@/context/GlobalProvider'
+import { addBookMark, getAllPosts } from '@/lib/appwrite'
+import useAppWrite from '@/lib/hooks/useAppWrite'
 import { ResizeMode, Video } from 'expo-av'
 import { useState } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 
-const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avatar } } }: { video: any }) => {
+const VideoCard = ({ video: { title, thumbnail, video, $id: id, isMarked, creator: { username, avatar } }, setPosts }: { video: any }) => {
+    // console.log(setTesting);
+    const { refetch, data } = useAppWrite(getAllPosts, setPosts)
+    // console.log(id); 
+    // console.log(rest, "rest");
+    const { user } = useGlobalContext()
     const [play, setPlay] = useState(false)
+    const [touchMenu, setTouchMenu] = useState(false)
+    // console.log(user);
+    const handleBookMark = async () => {
+        // console.log(user.id);
+        const updateResult = addBookMark(id)
+        refetch()
+
+
+
+    }
+    console.log(data);
     return (
         <View className='flex-col items-center px-4 mb-14'>
             <View className='flex-row gap-3 items-start'>
@@ -16,7 +35,7 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
                         />
                     </View>
                     <View className='justify-center flex-1 ml-3
-                     gap-y-1'>
+                     gap-y-1 '>
                         <Text
                             className='text-white font-psemibold text-sm'
                             numberOfLines={1}
@@ -30,9 +49,31 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
                         </Text>
                     </View>
                 </View>
-                <View className='pt-2'>
-                    <Image source={icons.menu} className='w-5 h-5' resizeMode='contain' />
+                <View>
+
                 </View>
+                <TouchableOpacity className='relative items-end w-[100px] h-5'
+                    onPress={() => setTouchMenu(true)}
+                    disabled={touchMenu}
+
+                >
+
+                    <View className='pt-2'>
+                        <Image source={icons.menu} className='w-5 h-5' resizeMode='contain' />
+                    </View>
+
+
+                    {touchMenu && <TouchableOpacity
+                        className='left-4 absolute top-1/2'
+                        disabled={!touchMenu}
+                        onPress={handleBookMark}
+                    >
+                        <Text className='text-white absolute '>
+                            {isMarked ? "Bookmarked" : "Bookmark"}
+                        </Text>
+                    </TouchableOpacity>
+                    }
+                </TouchableOpacity>
             </View>
             {play ? <Video source={{ uri: video }}
                 className='w-full h-60 rounded-xl mt-3 '
